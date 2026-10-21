@@ -1,44 +1,80 @@
 {
   "name": "Properties-Copycat",
   "version": "1.0.0",
-  "description": "Your Figma Plugin",
+  "description": "Plugin de Figma que copia las propiedades de una instancia y las pega en otras del mismo componente",
   "main": "code.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "lint": "eslint --ext .ts,.tsx --ignore-pattern node_modules .",
-    "lint:fix": "eslint --ext .ts,.tsx --ignore-pattern node_modules --fix .",
-    "watch": "npm run build -- --watch"
+    "build": "npm run build:code && npm run build:ui",
+    "build:code": "tsc -p tsconfig.json",
+    "build:ui": "vite build",
+    "icons": "node scripts/extract-icons.mjs",
+    "lint": "eslint --ext .ts,.js,.mjs --ignore-pattern node_modules --ignore-pattern dist --ignore-pattern code.js .",
+    "lint:fix": "eslint --ext .ts,.js,.mjs --ignore-pattern node_modules --ignore-pattern dist --ignore-pattern code.js --fix .",
+    "watch": "npm run build:code -- --watch & npm run build:ui -- --watch"
   },
   "author": "",
   "license": "",
   "devDependencies": {
+    "@create-figma-plugin/ui": "4.0.3",
     "@figma/eslint-plugin-figma-plugins": "*",
     "@figma/plugin-typings": "*",
     "@typescript-eslint/eslint-plugin": "^6.12.0",
     "@typescript-eslint/parser": "^6.12.0",
     "eslint": "^8.54.0",
-    "typescript": "^5.3.2"
+    "preact": "10.29.8",
+    "preact-render-to-string": "6.7.0",
+    "typescript": "^5.3.2",
+    "vite": "8.3.4",
+    "vite-plugin-singlefile": "2.3.3"
   },
   "eslintConfig": {
-    "extends": [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/recommended",
-      "plugin:@figma/figma-plugins/recommended"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    },
     "root": true,
-    "rules": {
-      "@typescript-eslint/no-unused-vars": [
-        "error",
-        {
-          "argsIgnorePattern": "^_",
-          "varsIgnorePattern": "^_",
-          "caughtErrorsIgnorePattern": "^_"
+    "extends": [
+      "eslint:recommended"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "*.ts"
+        ],
+        "extends": [
+          "plugin:@typescript-eslint/recommended",
+          "plugin:@figma/figma-plugins/recommended"
+        ],
+        "parser": "@typescript-eslint/parser",
+        "parserOptions": {
+          "project": "./tsconfig.json"
+        },
+        "rules": {
+          "@typescript-eslint/no-unused-vars": [
+            "error",
+            {
+              "argsIgnorePattern": "^_",
+              "varsIgnorePattern": "^_",
+              "caughtErrorsIgnorePattern": "^_"
+            }
+          ]
         }
-      ]
-    }
+      },
+      {
+        "files": [
+          "ui/**/*.js",
+          "scripts/**/*.mjs",
+          "vite.config.mjs"
+        ],
+        "parserOptions": {
+          "ecmaVersion": 2022,
+          "sourceType": "module"
+        },
+        "env": {
+          "browser": true,
+          "node": true,
+          "es2022": true
+        }
+      }
+    ]
+  },
+  "dependencies": {
+    "@rogieking/figui3": "11.1.6"
   }
 }

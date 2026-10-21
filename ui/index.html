@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Properties Copycat</title>
+</head>
+
+<body>
+  <main class="content">
+    <section class="section" aria-labelledby="selection-title">
+      <fig-header borderless>
+        <h3 class="section-title" id="selection-title">Selección</h3>
+      </fig-header>
+      <div id="selection" class="row row-empty" aria-live="polite">Selecciona una instancia</div>
+    </section>
+
+    <section id="copied-section" class="section" aria-labelledby="copied-title" hidden>
+      <fig-header borderless>
+        <h3 class="section-title" id="copied-title">Propiedades copiadas</h3>
+        <span id="copied-count" class="header-count"></span>
+      </fig-header>
+      <ul id="copied-list" class="list" aria-labelledby="copied-title"></ul>
+    </section>
+
+    <section id="warnings-section" class="section" aria-labelledby="warnings-title" hidden>
+      <fig-header borderless>
+        <h3 class="section-title" id="warnings-title">Avisos</h3>
+        <fig-button id="btn-hide-warnings" variant="ghost" icon aria-label="Ocultar avisos">
+          <fig-icon name="minus"></fig-icon>
+        </fig-button>
+      </fig-header>
+      <ul id="warnings-list" class="list" aria-labelledby="warnings-title"></ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div id="progress" class="progress" hidden>
+      <div class="progress-header">
+        <span id="progress-label">Aplicando...</span>
+        <span id="progress-percent">0%</span>
+      </div>
+      <progress id="progress-bar" max="100" value="0" aria-labelledby="progress-label"></progress>
+    </div>
+    <div class="footer-row">
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <fig-button id="btn-copy" variant="secondary">Copiar</fig-button>
+      <fig-button id="btn-paste" variant="primary" disabled>Pegar</fig-button>
+    </div>
+  </footer>
+
+  <script type="module" src="./main.js"></script>
+</body>
+
+</html>

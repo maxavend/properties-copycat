@@ -1,40 +1,48 @@
-Below are the steps to get your plugin running. You can also find instructions at:
+# Properties Copycat
 
-  https://www.figma.com/plugin-docs/plugin-quickstart-guide/
+Plugin de Figma que copia la configuración de una instancia y la pega en otras instancias del mismo componente.
 
-This plugin template uses Typescript and NPM, two standard tools in creating JavaScript applications.
+## Qué copia
 
-First, download Node.js which comes with NPM. This will allow you to install TypeScript and other
-libraries. You can find the download link here:
+Recorre la instancia completa, incluidas las instancias anidadas, y guarda:
 
-  https://nodejs.org/en/download/
+- **Propiedades de componente**: variantes, booleanos, textos e instance swap (también las enlazadas a variables).
+- **Textos**: contenido, estilo de texto, color o estilo de color, tipografía y tamaño (cuando no hay estilo), alineación y auto-resize.
+- **Auto layout**: dirección, alineación, paddings, espaciado, sizing (hug/fixed), `layoutAlign` y `layoutGrow`.
+- **Variables (tokens)**: campos numéricos y de visibilidad, variables de color en rellenos y bordes, y variables de tipografía en textos sin estilo.
 
-Next, install TypeScript using the command:
+## Uso
 
-  npm install -g typescript
+1. Selecciona **una** instancia y pulsa **Copiar**.
+2. Selecciona una o varias instancias de destino y pulsa **Pegar**.
 
-Finally, in the directory of your plugin, get the latest type definitions for the plugin API by running:
+Las capas se emparejan por tipo y nombre, así que el orden de las capas no importa. Las instancias de otro componente se omiten. Si algo no se pudo aplicar, el panel **Avisos** lo detalla.
 
-  npm install --save-dev @figma/plugin-typings
+## Limitaciones
 
-If you are familiar with JavaScript, TypeScript will look very familiar. In fact, valid JavaScript code
-is already valid Typescript code.
+- Los textos con varias fuentes o estilos en el origen solo copian lo que es común a todo el texto.
+- Una instancia anidada cambiada a mano (sin propiedad de instance swap) tiene otro nombre en el destino y no se empareja.
+- No se copian efectos ni layout grids.
 
-TypeScript adds type annotations to variables. This allows code editors such as Visual Studio Code
-to provide information about the Figma API while you are writing code, as well as help catch bugs
-you previously didn't notice.
+## Desarrollo
 
-For more information, visit https://www.typescriptlang.org/
+Requiere Node.js.
 
-Using TypeScript requires a compiler to convert TypeScript (code.ts) into JavaScript (code.js)
-for the browser to run.
+```bash
+npm install
+```
 
-We recommend writing TypeScript code using Visual Studio code:
+```bash
+npm run build
+```
 
-1. Download Visual Studio Code if you haven't already: https://code.visualstudio.com/.
-2. Open this directory in Visual Studio Code.
-3. Compile TypeScript to JavaScript: Run the "Terminal > Run Build Task..." menu item,
-    then select "npm: watch". You will have to do this again every time
-    you reopen Visual Studio Code.
+```bash
+npm run lint
+```
 
-That's it! Visual Studio Code will regenerate the JavaScript file every time you save.
+- `code.ts` es la lógica del plugin y se compila a `code.js`.
+- La interfaz está en `ui/` (`index.html`, `main.js`, `styles.css`) y usa los web components `fig-*` de [FigUI3](https://github.com/rogie/figui3) (núcleo MIT). Vite + `vite-plugin-singlefile` la empaqueta en un solo archivo, `dist/ui.html`, como exige Figma.
+- `ui/icons.js` contiene íconos oficiales de Figma extraídos de `@create-figma-plugin/ui`. Para regenerarlo usa `npm run icons`.
+- `npm run watch` recompila el código y la UI en cada cambio.
+
+En Figma: *Plugins → Development → Import plugin from manifest…* y elige `manifest.json`. Hay que ejecutar `npm run build` antes, porque `code.js` y `dist/` no se versionan.
