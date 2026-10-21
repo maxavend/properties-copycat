@@ -21,8 +21,8 @@ const progressPercent = $('progress-percent');
 const progressLabel = $('progress-label');
 
 const BUTTON_LABELS = {
-  copy: { idle: 'Copiar', busy: 'Copiando…' },
-  paste: { idle: 'Pegar', busy: 'Pegando…' }
+  copy: { idle: 'Copy', busy: 'Copying…' },
+  paste: { idle: 'Paste', busy: 'Pasting…' }
 };
 
 const LAYER_ICONS = {
@@ -99,13 +99,13 @@ function createRow({ tag = 'li', iconName, kind = 'default', text, className }) 
 function renderSelection(selection) {
   if (selection.length === 0) {
     selectionEl.className = 'row row-empty';
-    selectionEl.textContent = 'Selecciona una instancia';
+    selectionEl.textContent = 'Select an instance';
     return;
   }
   const [iconName, kind] = selection.length === 1
     ? LAYER_ICONS[selection[0].type] || ['frame', 'default']
     : [null, 'default'];
-  const text = selection.length === 1 ? selection[0].name : `${selection.length} elementos`;
+  const text = selection.length === 1 ? selection[0].name : `${selection.length} items`;
   const row = createRow({ tag: 'div', iconName, kind, text });
   selectionEl.className = row.className;
   selectionEl.replaceChildren(...row.childNodes);
@@ -115,7 +115,7 @@ function renderCopied(instances) {
   copiedSection.hidden = false;
   copiedList.replaceChildren(...(instances.length > 0
     ? instances.map(name => createRow({ iconName: 'instance', kind: 'component', text: name }))
-    : [createRow({ text: 'Raíz copiada' })]));
+    : [createRow({ text: 'Root copied' })]));
   copiedCount.textContent = instances.length > 0 ? String(instances.length) : '';
 }
 

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Properties Copycat"><title>Properties Copycat</title><defs>
+<linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#B98AFF"/><stop offset=".5" stop-color="#9747FF"/><stop offset="1" stop-color="#6A1FE0"/></linearGradient>
+<linearGradient id="copy" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#C04BFF"/><stop offset=".55" stop-color="#FF4F9A"/><stop offset="1" stop-color="#FF8A3D"/></linearGradient>
+<linearGradient id="sheen" x1="0" y1="0" x2=".9" y2=".9">
+  <stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset=".3" stop-color="#fff" stop-opacity=".16"/>
+  <stop offset=".6" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".35" stop-color="#fff" stop-opacity=".15"/>
+  <stop offset=".7" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#fff" stop-opacity=".6"/></linearGradient>
+<linearGradient id="ringSheen" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="inCopy"><path d="M149.51 64.49A12 12 0 0 1 166.49 64.49L221.51 119.51A12 12 0 0 1 221.51 136.49L166.49 191.51A12 12 0 0 1 149.51 191.51L94.49 136.49A12 12 0 0 1 94.49 119.51Z"/></clipPath>
+<filter id="refract" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="5"/></filter>
+<filter id="shadow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7"/></filter>
+</defs><g transform="translate(70.89 70.89) scale(3.45)">
+<path d="M85.51 64.49A12 12 0 0 1 102.49 64.49L157.51 119.51A12 12 0 0 1 157.51 136.49L102.49 191.51A12 12 0 0 1 85.51 191.51L30.49 136.49A12 12 0 0 1 30.49 119.51ZM50.12 125.88A3 3 0 0 0 50.12 130.12L91.88 171.88A3 3 0 0 0 96.12 171.88L137.88 130.12A3 3 0 0 0 137.88 125.88L96.12 84.12A3 3 0 0 0 91.88 84.12Z" fill="#17112B" fill-rule="evenodd" opacity=".45" filter="url(#shadow)" transform="translate(0 9)"/>
+<path d="M85.51 64.49A12 12 0 0 1 102.49 64.49L157.51 119.51A12 12 0 0 1 157.51 136.49L102.49 191.51A12 12 0 0 1 85.51 191.51L30.49 136.49A12 12 0 0 1 30.49 119.51ZM50.12 125.88A3 3 0 0 0 50.12 130.12L91.88 171.88A3 3 0 0 0 96.12 171.88L137.88 130.12A3 3 0 0 0 137.88 125.88L96.12 84.12A3 3 0 0 0 91.88 84.12Z" fill="#4A12AE" fill-rule="evenodd" transform="translate(0 4)"/>
+<path d="M85.51 64.49A12 12 0 0 1 102.49 64.49L157.51 119.51A12 12 0 0 1 157.51 136.49L102.49 191.51A12 12 0 0 1 85.51 191.51L30.49 136.49A12 12 0 0 1 30.49 119.51ZM50.12 125.88A3 3 0 0 0 50.12 130.12L91.88 171.88A3 3 0 0 0 96.12 171.88L137.88 130.12A3 3 0 0 0 137.88 125.88L96.12 84.12A3 3 0 0 0 91.88 84.12Z" fill="url(#ring)" fill-rule="evenodd"/>
+<path d="M85.51 64.49A12 12 0 0 1 102.49 64.49L157.51 119.51A12 12 0 0 1 157.51 136.49L102.49 191.51A12 12 0 0 1 85.51 191.51L30.49 136.49A12 12 0 0 1 30.49 119.51ZM50.12 125.88A3 3 0 0 0 50.12 130.12L91.88 171.88A3 3 0 0 0 96.12 171.88L137.88 130.12A3 3 0 0 0 137.88 125.88L96.12 84.12A3 3 0 0 0 91.88 84.12Z" fill="url(#ringSheen)" fill-rule="evenodd"/>
+<path d="M85.51 64.49A12 12 0 0 1 102.49 64.49L157.51 119.51A12 12 0 0 1 157.51 136.49L102.49 191.51A12 12 0 0 1 85.51 191.51L30.49 136.49A12 12 0 0 1 30.49 119.51ZM50.12 125.88A3 3 0 0 0 50.12 130.12L91.88 171.88A3 3 0 0 0 96.12 171.88L137.88 130.12A3 3 0 0 0 137.88 125.88L96.12 84.12A3 3 0 0 0 91.88 84.12Z" fill="none" stroke="url(#rim)" stroke-width="1.8"/>
+<path d="M149.51 64.49A12 12 0 0 1 166.49 64.49L221.51 119.51A12 12 0 0 1 221.51 136.49L166.49 191.51A12 12 0 0 1 149.51 191.51L94.49 136.49A12 12 0 0 1 94.49 119.51Z" fill="#17112B" opacity=".5" filter="url(#shadow)" transform="translate(4 12)"/>
+<g clip-path="url(#inCopy)">
+  <path d="M85.51 64.49A12 12 0 0 1 102.49 64.49L157.51 119.51A12 12 0 0 1 157.51 136.49L102.49 191.51A12 12 0 0 1 85.51 191.51L30.49 136.49A12 12 0 0 1 30.49 119.51ZM50.12 125.88A3 3 0 0 0 50.12 130.12L91.88 171.88A3 3 0 0 0 96.12 171.88L137.88 130.12A3 3 0 0 0 137.88 125.88L96.12 84.12A3 3 0 0 0 91.88 84.12Z" fill="#D9BCFF" fill-rule="evenodd" filter="url(#refract)" transform="translate(7 2)"/>
+</g>
+<path d="M149.51 64.49A12 12 0 0 1 166.49 64.49L221.51 119.51A12 12 0 0 1 221.51 136.49L166.49 191.51A12 12 0 0 1 149.51 191.51L94.49 136.49A12 12 0 0 1 94.49 119.51Z" fill="#B3206E" opacity=".55" transform="translate(0 4)"/>
+<path d="M149.51 64.49A12 12 0 0 1 166.49 64.49L221.51 119.51A12 12 0 0 1 221.51 136.49L166.49 191.51A12 12 0 0 1 149.51 191.51L94.49 136.49A12 12 0 0 1 94.49 119.51Z" fill="url(#copy)" opacity=".66"/>
+<path d="M149.51 64.49A12 12 0 0 1 166.49 64.49L221.51 119.51A12 12 0 0 1 221.51 136.49L166.49 191.51A12 12 0 0 1 149.51 191.51L94.49 136.49A12 12 0 0 1 94.49 119.51Z" fill="url(#sheen)"/>
+<path d="M149.51 64.49A12 12 0 0 1 166.49 64.49L221.51 119.51A12 12 0 0 1 221.51 136.49L166.49 191.51A12 12 0 0 1 149.51 191.51L94.49 136.49A12 12 0 0 1 94.49 119.51Z" fill="none" stroke="url(#rim)" stroke-width="2.2"/>
+</g></svg>

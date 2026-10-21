@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -10,14 +10,14 @@
   <main class="content">
     <section class="section" aria-labelledby="selection-title">
       <fig-header borderless>
-        <h3 class="section-title" id="selection-title">Selección</h3>
+        <h3 class="section-title" id="selection-title">Selection</h3>
       </fig-header>
-      <div id="selection" class="row row-empty" aria-live="polite">Selecciona una instancia</div>
+      <div id="selection" class="row row-empty" aria-live="polite">Select an instance</div>
     </section>
 
     <section id="copied-section" class="section" aria-labelledby="copied-title" hidden>
       <fig-header borderless>
-        <h3 class="section-title" id="copied-title">Propiedades copiadas</h3>
+        <h3 class="section-title" id="copied-title">Copied properties</h3>
         <span id="copied-count" class="header-count"></span>
       </fig-header>
       <ul id="copied-list" class="list" aria-labelledby="copied-title"></ul>
@@ -25,8 +25,8 @@
 
     <section id="warnings-section" class="section" aria-labelledby="warnings-title" hidden>
       <fig-header borderless>
-        <h3 class="section-title" id="warnings-title">Avisos</h3>
-        <fig-button id="btn-hide-warnings" variant="ghost" icon aria-label="Ocultar avisos">
+        <h3 class="section-title" id="warnings-title">Warnings</h3>
+        <fig-button id="btn-hide-warnings" variant="ghost" icon aria-label="Hide warnings">
           <fig-icon name="minus"></fig-icon>
         </fig-button>
       </fig-header>
@@ -37,15 +37,15 @@
   <footer class="footer">
     <div id="progress" class="progress" hidden>
       <div class="progress-header">
-        <span id="progress-label">Aplicando...</span>
+        <span id="progress-label">Applying…</span>
         <span id="progress-percent">0%</span>
       </div>
       <progress id="progress-bar" max="100" value="0" aria-labelledby="progress-label"></progress>
     </div>
     <div class="footer-row">
       <p id="status" class="status" role="status" aria-live="polite"></p>
-      <fig-button id="btn-copy" variant="secondary">Copiar</fig-button>
-      <fig-button id="btn-paste" variant="primary" disabled>Pegar</fig-button>
+      <fig-button id="btn-copy" variant="secondary">Copy</fig-button>
+      <fig-button id="btn-paste" variant="primary" disabled>Paste</fig-button>
     </div>
   </footer>
 

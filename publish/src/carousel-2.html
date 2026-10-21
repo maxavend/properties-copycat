@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!-- Figma Community carousel 2 (1920×1080): what it copies. Render with `npm run listing`. -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="listing.css">
+  <style>
+    .stage {
+      display: grid;
+      grid-template-columns: 620px 900px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h2 {
+      font-size: 80px;
+    }
+
+    .facts {
+      margin: 56px 0 0;
+      padding: 0;
+      list-style: none;
+      font-size: 26px;
+      line-height: 1.8;
+      color: var(--text-2);
+    }
+
+    /* A plain spec list: name on the left, what it covers on the right */
+    .spec {
+      margin: 0;
+    }
+
+    .spec div {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 40px;
+      padding: 40px 0;
+      border-top: 1.5px solid var(--line);
+    }
+
+    .spec div:last-child {
+      border-bottom: 1.5px solid var(--line);
+    }
+
+    .spec dt {
+      font-size: 34px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .spec dd {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.4;
+      color: var(--text-2);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage">
+    <div>
+      <p class="kicker">What it copies</p>
+      <h2>Everything<br>you set up.<br><span class="quiet">In every copy.</span></h2>
+      <ul class="facts">
+        <li>Nested instances included</li>
+        <li>Layers matched by name</li>
+        <li>Warns about what it couldn’t apply</li>
+        <li>No network access</li>
+      </ul>
+    </div>
+
+    <dl class="spec">
+      <div>
+        <dt>Component properties</dt>
+        <dd>Variants, booleans, text and instance swap, including ones bound to variables.</dd>
+      </div>
+      <div>
+        <dt>Text</dt>
+        <dd>Content, text style, color, font, alignment and auto&#8209;resize.</dd>
+      </div>
+      <div>
+        <dt>Auto layout</dt>
+        <dd>Direction, alignment, padding, spacing and sizing (hug or fixed).</dd>
+      </div>
+      <div>
+        <dt>Variables</dt>
+        <dd>Spacing, radius, size, opacity, and fill and stroke colors.</dd>
+      </div>
+    </dl>
+  </div>
+</body>
+
+</html>

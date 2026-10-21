@@ -1,0 +1,302 @@
+/* Shared styles for the Figma Community images (cover and carousel), 1920×1080.
+   Flat colour only: violet marks the source and pink the copies, as in the logo.
+   No gradient text, glows or gradient fills, which read as generic AI output. */
+@font-face {
+  font-family: "Inter Listing";
+  src: url("fonts/inter-opsz.woff2") format("woff2");
+  font-weight: 100 900;
+}
+
+:root {
+  --bg: #18171c;
+  --surface: #222128;
+  --line: rgba(255, 255, 255, 0.1);
+  --text: #f5f4f7;
+  --text-2: #9d9aa6;
+  --violet: #9747ff;
+  --pink: #ff4f9a;
+  --card: #ffffff;
+  --card-text: #18171c;
+  --card-muted: #8c8994;
+  --card-line: #ecebf0;
+  --card-fill: #f4f1fb;
+}
+
+html,
+body {
+  margin: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  color: var(--text);
+  font-family: "Inter Listing", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  background: var(--bg);
+}
+
+.stage {
+  position: relative;
+  box-sizing: border-box;
+  width: 1920px;
+  height: 1080px;
+  padding: 120px 140px;
+  background: var(--bg);
+}
+
+/* --- Brand and headings --- */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* glass-symbol.svg keeps 15% side and 26% top/bottom margins; crop them visually */
+.brand img {
+  width: 92px;
+  height: 92px;
+  margin: -24px -6px -24px -14px;
+}
+
+h1,
+h2 {
+  margin: 0;
+  font-weight: 650;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+h1 {
+  font-size: 112px;
+}
+
+h2 {
+  font-size: 84px;
+}
+
+.quiet {
+  color: var(--text-2);
+}
+
+.kicker {
+  margin: 0 0 28px;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+.lead {
+  margin: 0;
+  font-size: 36px;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--text-2);
+}
+
+/* --- Instance mock: a wireframe card, the kind of component people configure --- */
+
+.inst {
+  position: relative;
+  box-sizing: border-box;
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--card-text);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Figma-style selection: violet for the source, pink for the copies (as in the logo) */
+.inst::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border: 3px solid var(--sel, var(--violet));
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+.inst.copy {
+  --sel: var(--pink);
+}
+
+.inst .tag {
+  position: absolute;
+  left: -8px;
+  top: -46px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--sel, var(--violet));
+  white-space: nowrap;
+}
+
+.diamond {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2.5px solid currentColor;
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+
+/* Mock parts */
+.avatar {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #e6dcff;
+}
+
+.bars {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.bar {
+  height: 12px;
+  border-radius: 6px;
+  background: var(--card-line);
+}
+
+.bar.strong {
+  height: 16px;
+  background: #d6d3de;
+}
+
+.toggle {
+  position: relative;
+  flex: none;
+  width: 56px;
+  height: 32px;
+  border-radius: 16px;
+  background: var(--violet);
+}
+
+.toggle::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.media {
+  height: 150px;
+  border-radius: 10px;
+  background: var(--card-fill);
+}
+
+.action {
+  display: grid;
+  place-items: center;
+  height: 52px;
+  border-radius: 10px;
+  background: var(--violet);
+}
+
+.action::after {
+  content: "";
+  width: 84px;
+  height: 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.mcard {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: 340px;
+  padding: 26px;
+}
+
+.mcard .head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.mcard .lines {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Compact, horizontal variant for lists of instances */
+.mrow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 430px;
+  padding: 22px 24px;
+}
+
+.mrow .action {
+  flex: none;
+  width: 92px;
+  height: 44px;
+}
+
+.mrow .action::after {
+  width: 44px;
+}
+
+/* --- Plugin panel: the real UI (dist/ui.html) at 2× --- */
+
+.panel {
+  box-sizing: border-box;
+  width: 640px;
+  height: 800px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #2c2c2c;
+  border: 2px solid #3a3a3a;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+
+.panel iframe {
+  width: 320px;
+  height: 400px;
+  border: 0;
+  transform: scale(2);
+  transform-origin: 0 0;
+  color-scheme: dark;
+}
+
+/* --- Steps --- */
+
+.step {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.step b {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 2.5px solid var(--violet);
+  border-radius: 50%;
+  font-size: 22px;
+  color: var(--violet);
+}
+
+.step.copy b {
+  border-color: var(--pink);
+  color: var(--pink);
+}

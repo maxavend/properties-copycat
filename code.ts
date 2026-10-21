@@ -60,8 +60,8 @@ let rootFamily: string | null = null;
 let pasteCounter = 0;
 let totalNodesInSnapshot = 0;
 
-// Per-paste state
-let failures: string[] = [];
+// Per-paste state: user-facing failure message -> occurrences
+let failures = new Map<string, number>();
 let unmatchedLayers = 0;
 const variableCache = new Map<string, Variable>();
 
@@ -85,15 +85,44 @@ function sendSelectionInfo() {
   figma.ui.postMessage({ type: 'selection-update', selection: info });
 }
 
-// Run one write and record the failure instead of aborting the rest of the node
-async function attempt(label: string, fn: () => void | Promise<void>) {
+// Run one write and record the failure instead of aborting the rest of the node.
+// `message` is shown to the user; the technical error only goes to the console.
+async function attempt(message: string, fn: () => void | Promise<void>) {
   try {
     await fn();
   } catch (e) {
-    const reason = e instanceof Error ? e.message : String(e);
-    failures.push(`${label}: ${reason}`);
-    console.warn(label, e);
+    failures.set(message, (failures.get(message) ?? 0) + 1);
+    console.warn(message, e);
   }
+}
+
+const LAYOUT_LABELS: { [K in LayoutKey]: string } = {
+  layoutMode: 'the auto layout direction',
+  primaryAxisAlignItems: 'the alignment',
+  counterAxisAlignItems: 'the alignment',
+  paddingLeft: 'the padding',
+  paddingRight: 'the padding',
+  paddingTop: 'the padding',
+  paddingBottom: 'the padding',
+  itemSpacing: 'the spacing',
+  layoutAlign: 'the auto layout resizing',
+  layoutGrow: 'the auto layout resizing',
+  primaryAxisSizingMode: 'the sizing (hug/fixed)',
+  counterAxisSizingMode: 'the sizing (hug/fixed)'
+};
+
+function variableFieldLabel(field: string): string {
+  if (/^padding/.test(field)) return 'padding';
+  if (/Spacing$|Gap$/.test(field)) return 'spacing';
+  if (/Radius$/.test(field)) return 'radius';
+  if (/^stroke/.test(field)) return 'stroke weight';
+  if (/^(min|max)(Width|Height)$/.test(field)) return 'min or max size';
+  const labels: { [field: string]: string } = {
+    width: 'width', height: 'height', opacity: 'opacity', visible: 'visibility', characters: 'text',
+    fontFamily: 'font', fontStyle: 'font', fontWeight: 'font', fontSize: 'font size',
+    letterSpacing: 'letter spacing', lineHeight: 'line height', paragraphIndent: 'paragraph indent'
+  };
+  return labels[field] ?? field;
 }
 
 // Identifies which component (or component set, for variants) an instance comes from
@@ -112,7 +141,7 @@ async function getVariable(id: string): Promise<Variable> {
   const cached = variableCache.get(id);
   if (cached) return cached;
   const variable = await figma.variables.getVariableByIdAsync(id);
-  if (!variable) throw new Error(`variable ${id} no encontrada`);
+  if (!variable) throw new Error(`variable ${id} not found`);
   variableCache.set(id, variable);
   return variable;
 }
@@ -258,21 +287,21 @@ async function loadTextFonts(target: TextNode, data: TextData) {
 }
 
 async function applyText(target: TextNode, data: TextData) {
-  const label = `Texto "${target.name}"`;
+  const name = `"${target.name}"`;
 
-  await attempt(`${label} (fuentes)`, () => loadTextFonts(target, data));
+  await attempt(`Couldn't load the fonts of ${name}.`, () => loadTextFonts(target, data));
 
-  await attempt(`${label} (contenido)`, () => {
+  await attempt(`Couldn't change the text of ${name}.`, () => {
     if (target.characters !== data.characters) target.characters = data.characters;
   });
 
   if (typeof data.textStyleId === 'string') {
     if (data.textStyleId) {
-      await attempt(`${label} (estilo)`, async () => {
+      await attempt(`Couldn't apply the text style to ${name}. Check that its library is enabled.`, async () => {
         if (target.textStyleId !== data.textStyleId) await target.setTextStyleIdAsync(data.textStyleId as string);
       });
     } else {
-      await attempt(`${label} (tipografía)`, async () => {
+      await attempt(`Couldn't apply the font to ${name}.`, async () => {
         if (target.textStyleId !== '') await target.setTextStyleIdAsync('');
         if (data.fontName !== figma.mixed) target.fontName = data.fontName;
         if (data.fontSize !== figma.mixed && target.fontSize !== data.fontSize) target.fontSize = data.fontSize;
@@ -281,7 +310,7 @@ async function applyText(target: TextNode, data: TextData) {
   }
 
   // A text style doesn't include color, so fills are applied either way
-  await attempt(`${label} (color)`, async () => {
+  await attempt(`Couldn't apply the color of ${name}.`, async () => {
     if (typeof data.fillStyleId === 'string' && data.fillStyleId) {
       if (target.fillStyleId !== data.fillStyleId) await target.setFillStyleIdAsync(data.fillStyleId);
     } else if (data.fills !== figma.mixed && JSON.stringify(target.fills) !== JSON.stringify(data.fills)) {
@@ -289,7 +318,7 @@ async function applyText(target: TextNode, data: TextData) {
     }
   });
 
-  await attempt(`${label} (alineación)`, () => {
+  await attempt(`Couldn't apply the alignment of ${name}.`, () => {
     if (target.textAlignHorizontal !== data.textAlignHorizontal) target.textAlignHorizontal = data.textAlignHorizontal;
     if (target.textAlignVertical !== data.textAlignVertical) target.textAlignVertical = data.textAlignVertical;
     if (target.textAutoResize !== data.textAutoResize) target.textAutoResize = data.textAutoResize;
@@ -303,7 +332,7 @@ function writeLayoutField<K extends LayoutKey>(target: AutoLayoutNode, key: K, v
 
 async function applyLayout(target: AutoLayoutNode, layout: LayoutData) {
   for (const key of LAYOUT_KEYS) {
-    await attempt(`Layout "${target.name}" (${key})`, () => writeLayoutField(target, key, layout[key]));
+    await attempt(`Couldn't apply ${LAYOUT_LABELS[key]} to "${target.name}".`, () => writeLayoutField(target, key, layout[key]));
   }
 }
 
@@ -325,13 +354,13 @@ async function bindPaintVariables(paints: readonly Paint[], ids: (string | null)
 }
 
 async function applyVariables(target: SceneNode, bindings: VariableBindings, hasTextStyle: boolean) {
-  const label = `Variable en "${target.name}"`;
+  const failed = (what: string) => `Couldn't bind the ${what} variable on "${target.name}". Check that its library is enabled.`;
   const current = (target.boundVariables ?? {}) as { [field: string]: VariableAlias | VariableAlias[] | undefined };
 
   for (const { field, id } of bindings.node) {
     const bound = current[field];
     if (bound && !Array.isArray(bound) && bound.id === id) continue;
-    await attempt(`${label} (${field})`, async () => target.setBoundVariable(field, await getVariable(id)));
+    await attempt(failed(variableFieldLabel(field)), async () => target.setBoundVariable(field, await getVariable(id)));
   }
 
   // Binding typography variables on top of a text style would detach it
@@ -339,14 +368,14 @@ async function applyVariables(target: SceneNode, bindings: VariableBindings, has
     for (const { field, id } of bindings.text) {
       const bound = current[field];
       if (Array.isArray(bound) && bound.length === 1 && bound[0].id === id) continue;
-      await attempt(`${label} (${field})`, async () => target.setBoundVariable(field, await getVariable(id)));
+      await attempt(failed(variableFieldLabel(field)), async () => target.setBoundVariable(field, await getVariable(id)));
     }
   }
 
   if (bindings.fills && 'fills' in target && target.fills !== figma.mixed) {
     const fills = target.fills;
     const ids = bindings.fills;
-    await attempt(`${label} (relleno)`, async () => {
+    await attempt(failed('fill'), async () => {
       const next = await bindPaintVariables(fills, ids);
       if (next) target.fills = next;
     });
@@ -355,7 +384,7 @@ async function applyVariables(target: SceneNode, bindings: VariableBindings, has
   if (bindings.strokes && 'strokes' in target) {
     const strokes = target.strokes;
     const ids = bindings.strokes;
-    await attempt(`${label} (borde)`, async () => {
+    await attempt(failed('stroke'), async () => {
       const next = await bindPaintVariables(strokes, ids);
       if (next) target.strokes = next;
     });
@@ -374,7 +403,7 @@ async function applySnapshot(target: SceneNode, snapshot: NodeSnapshot, totalTar
   // Properties first: a variant or instance swap can replace the children below
   if (target.type === 'INSTANCE' && snapshot.properties && Object.keys(snapshot.properties).length > 0) {
     const props = snapshot.properties;
-    await attempt(`Propiedades de "${target.name}"`, () => target.setProperties(props));
+    await attempt(`Couldn't apply the properties of "${target.name}".`, () => target.setProperties(props));
   }
 
   if (target.type === 'TEXT' && snapshot.textData) {
@@ -405,25 +434,25 @@ async function applySnapshot(target: SceneNode, snapshot: NodeSnapshot, totalTar
 async function pasteProperties(snapshot: NodeSnapshot) {
   const selection = figma.currentPage.selection;
   if (selection.length === 0) {
-    notifyUI("Selecciona destinos.");
+    notifyUI("Select the target instances.");
     return;
   }
 
   const instancesToPaste = selection.filter((n): n is InstanceNode => n.type === 'INSTANCE');
   if (instancesToPaste.length === 0) {
-    notifyUI("Selecciona instancias válidas.");
+    notifyUI("Select valid instances.");
     return;
   }
 
   const totalWork = instancesToPaste.length * totalNodesInSnapshot;
   pasteCounter = 0;
-  failures = [];
+  failures = new Map();
   unmatchedLayers = 0;
   variableCache.clear();
   const skipped: string[] = [];
 
-  notifyUI("Sincronizando...");
-  sendProgress(0, "Sincronizando componentes...");
+  notifyUI("Pasting…");
+  sendProgress(0, "Pasting properties…");
 
   for (const node of instancesToPaste) {
     const family = await getComponentFamily(node);
@@ -435,24 +464,26 @@ async function pasteProperties(snapshot: NodeSnapshot) {
     await applySnapshot(node, snapshot, totalWork);
   }
 
-  sendProgress(1, "Finalizado");
+  sendProgress(1, "Done");
 
   const warnings = [
-    ...skipped.map(name => `"${name}" omitida: es de otro componente`),
-    ...failures
+    ...skipped.map(name => `Skipped "${name}" because it's from another component.`),
+    ...Array.from(failures, ([message, count]) => count > 1 ? `${message} (×${count})` : message)
   ];
   if (unmatchedLayers > 0) {
-    warnings.push(`${unmatchedLayers} capa(s) sin equivalente en el destino`);
+    warnings.push(unmatchedLayers === 1
+      ? '1 layer has no match in the target.'
+      : `${unmatchedLayers} layers have no match in the target.`);
   }
   figma.ui.postMessage({ type: 'paste-result', warnings });
 
   const applied = instancesToPaste.length - skipped.length;
   if (applied === 0) {
-    notifyUI("Ninguna instancia es del mismo componente.");
+    notifyUI("None of the instances are from the same component.");
   } else if (warnings.length > 0) {
-    notifyUI(`Sincronizado con ${warnings.length} aviso(s).`);
+    notifyUI(`Pasted with ${warnings.length} warning${warnings.length === 1 ? '' : 's'}.`);
   } else {
-    notifyUI(`¡Sincronización completa!`, 3000);
+    notifyUI('Pasted.', 3000);
   }
 }
 
@@ -469,11 +500,11 @@ figma.ui.onmessage = async (msg) => {
     try {
       const selection = figma.currentPage.selection;
       if (selection.length !== 1 || selection[0].type !== 'INSTANCE') {
-        notifyUI("Selecciona exactamente una instancia.");
+        notifyUI("Select exactly one instance.");
         return;
       }
 
-      notifyUI("Copiando estructura profunda...");
+      notifyUI("Copying…");
       rootSnapshot = createSnapshot(selection[0]);
       rootFamily = await getComponentFamily(selection[0]);
       totalNodesInSnapshot = countNodes(rootSnapshot);
@@ -483,7 +514,7 @@ figma.ui.onmessage = async (msg) => {
       // Remove duplicates and keep it clean
       const uniqueInstances = Array.from(new Set(instances));
 
-      notifyUI(`Estructura copiada.`, 3000);
+      notifyUI('Copied.', 3000);
 
       figma.ui.postMessage({
         type: 'properties-copied',
@@ -491,7 +522,7 @@ figma.ui.onmessage = async (msg) => {
       });
     } catch (err) {
       console.error(err);
-      notifyUI("Error al copiar.");
+      notifyUI("Couldn't copy.");
     } finally {
       figma.ui.postMessage({ type: 'copy-done' });
     }
@@ -500,13 +531,13 @@ figma.ui.onmessage = async (msg) => {
   if (msg.type === 'paste-properties') {
     try {
       if (!rootSnapshot) {
-        notifyUI("No hay datos copiados.");
+        notifyUI("Copy an instance first.");
         return;
       }
       await pasteProperties(rootSnapshot);
     } catch (err) {
       console.error(err);
-      notifyUI("Error al pegar.");
+      notifyUI("Couldn't paste.");
     } finally {
       figma.ui.postMessage({ type: 'paste-done' });
     }

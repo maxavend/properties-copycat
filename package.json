@@ -10,7 +10,9 @@
     "icons": "node scripts/extract-icons.mjs",
     "lint": "eslint --ext .ts,.js,.mjs --ignore-pattern node_modules --ignore-pattern dist --ignore-pattern code.js .",
     "lint:fix": "eslint --ext .ts,.js,.mjs --ignore-pattern node_modules --ignore-pattern dist --ignore-pattern code.js --fix .",
-    "watch": "npm run build:code -- --watch & npm run build:ui -- --watch"
+    "watch": "npm run build:code -- --watch & npm run build:ui -- --watch",
+    "release": "npm run build && npm run lint && node scripts/check-release.mjs",
+    "listing": "npm run build && node scripts/render-listing.mjs"
   },
   "author": "",
   "license": "",

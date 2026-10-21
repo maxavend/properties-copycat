@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!-- Figma Community carousel 1 (1920×1080): how it works. Render with `npm run listing`. -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="listing.css">
+  <style>
+    .stage {
+      display: grid;
+      grid-template-columns: 940px 640px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: 430px 430px;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 64px;
+    }
+
+    .col {
+      display: flex;
+      flex-direction: column;
+      gap: 66px;
+    }
+
+    .col .step {
+      margin-bottom: -8px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage">
+    <div>
+      <p class="kicker">How it works</p>
+      <h2>Set it up once.<br><span class="quiet">Paste it everywhere.</span></h2>
+
+      <div class="flow">
+        <div class="col" id="source">
+          <span class="step"><b>1</b>Copy the source</span>
+        </div>
+        <div class="col" id="copies">
+          <span class="step copy"><b>2</b>Paste onto the rest</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <iframe id="ui" src="../../dist/ui.html" title="Properties Copycat"></iframe>
+    </div>
+  </div>
+
+  <template id="row">
+    <div class="inst mrow">
+      <div class="tag"><span class="diamond"></span><span class="tag-text"></span></div>
+      <span class="avatar"></span>
+      <span class="bars"><span class="bar strong" style="width: 80%"></span><span class="bar" style="width: 55%"></span></span>
+      <span class="toggle"></span>
+      <span class="action"></span>
+    </div>
+  </template>
+
+  <script>
+    const row = document.getElementById('row').content.firstElementChild;
+    function add(parent, cls, tag) {
+      const el = row.cloneNode(true);
+      if (cls) el.classList.add(cls);
+      el.querySelector('.tag-text').textContent = tag;
+      return parent.appendChild(el);
+    }
+    add(document.getElementById('source'), null, 'Card');
+    for (let i = 0; i < 3; i++) add(document.getElementById('copies'), 'copy', 'Card');
+
+    // Same messages the plugin sends after copying and pasting onto three instances
+    const frame = document.getElementById('ui');
+    frame.addEventListener('load', () => {
+      const send = (pluginMessage) => frame.contentWindow.postMessage({ pluginMessage }, '*');
+      send({ type: 'selection-update', selection: [{ type: 'INSTANCE' }, { type: 'INSTANCE' }, { type: 'INSTANCE' }] });
+      send({ type: 'properties-copied', instances: ['Card', 'Avatar', 'Toggle', 'Button'] });
+      send({ type: 'copy-done' });
+      send({ type: 'paste-result', warnings: [] });
+      send({ type: 'status', message: 'Pasted.' });
+    });
+  </script>
+</body>
+
+</html>

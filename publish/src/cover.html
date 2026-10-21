@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!-- Figma Community cover (1920×1080). Render with `npm run listing`. -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="listing.css">
+  <style>
+    .stage {
+      display: grid;
+      grid-template-columns: 820px 1fr;
+      align-items: center;
+    }
+
+    .copyblock {
+      display: flex;
+      flex-direction: column;
+      gap: 44px;
+    }
+
+    h1 {
+      font-size: 96px;
+      margin-top: 16px;
+    }
+
+    .lead {
+      max-width: 800px;
+      font-size: 33px;
+    }
+
+    /* One source on the left, its copies on the right, joined by the paste */
+    .scene {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 150px;
+    }
+
+    .copies {
+      display: flex;
+      flex-direction: column;
+      gap: 96px;
+    }
+
+    .copies .mcard {
+      width: 300px;
+      gap: 18px;
+      padding: 22px;
+    }
+
+    .copies .media {
+      height: 96px;
+    }
+
+    .links {
+      position: absolute;
+      inset: 0;
+      overflow: visible;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage">
+    <div class="copyblock">
+      <div class="brand"><img src="../logo.svg" alt="">Properties Copycat</div>
+      <h1>Copy one instance.<br><span class="quiet">Paste it everywhere.</span></h1>
+      <p class="lead">Variants, text, auto layout and variables, from one instance to every instance of the same component.</p>
+    </div>
+
+    <div class="scene">
+      <div id="source"></div>
+      <div class="copies" id="copies"></div>
+      <svg class="links" id="links">
+      </svg>
+    </div>
+  </div>
+
+  <template id="card">
+    <div class="inst mcard">
+      <div class="tag"><span class="diamond"></span><span class="tag-text"></span></div>
+      <div class="head">
+        <span class="avatar"></span>
+        <span class="bars"><span class="bar strong" style="width: 70%"></span><span class="bar" style="width: 45%"></span></span>
+        <span class="toggle"></span>
+      </div>
+      <div class="media"></div>
+      <div class="lines">
+        <span class="bar" style="width: 100%"></span>
+        <span class="bar" style="width: 80%"></span>
+      </div>
+      <div class="action"></div>
+    </div>
+  </template>
+
+  <script>
+    const card = document.getElementById('card').content.firstElementChild;
+    function add(parent, cls, tag) {
+      const el = card.cloneNode(true);
+      if (cls) el.classList.add(cls);
+      el.querySelector('.tag-text').textContent = tag;
+      return parent.appendChild(el);
+    }
+    const source = add(document.getElementById('source'), null, 'Source');
+    const copies = ['Copy', 'Copy'].map(tag => add(document.getElementById('copies'), 'copy', tag));
+
+    // Curves from the source's right edge to each copy's left edge
+    const svg = 'http://www.w3.org/2000/svg';
+    const links = document.getElementById('links');
+    const draw = (name, attrs) => {
+      const el = document.createElementNS(svg, name);
+      Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
+      links.appendChild(el);
+    };
+    const box = links.getBoundingClientRect();
+    const from = source.getBoundingClientRect();
+    const x1 = from.right + 22 - box.left;
+    const y1 = from.top + from.height / 2 - box.top;
+    for (const copy of copies) {
+      const to = copy.getBoundingClientRect();
+      const x2 = to.left - 22 - box.left;
+      const y2 = to.top + to.height / 2 - box.top;
+      const mid = (x1 + x2) / 2;
+      draw('path', {
+        d: `M${x1} ${y1}C${mid} ${y1} ${mid} ${y2} ${x2} ${y2}`, fill: 'none', stroke: '#4a4852',
+        'stroke-width': 3, 'stroke-linecap': 'round'
+      });
+      draw('circle', { cx: x2, cy: y2, r: 6, fill: '#FF4F9A' });
+    }
+    draw('circle', { cx: x1, cy: y1, r: 6, fill: '#9747FF' });
+  </script>
+</body>
+
+</html>
