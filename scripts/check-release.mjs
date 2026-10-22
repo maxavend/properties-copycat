@@ -52,7 +52,7 @@ function pngSize(file) {
 const LISTING_IMAGES = [
   ['publish/icon.png', [128, 128]],
   ['publish/cover.png', [1920, 1080]],
-  ...Array.from({ length: 7 }, (_, i) => [`publish/carousel-${i + 1}.png`, [1920, 1080]])
+  ...Array.from({ length: 8 }, (_, i) => [`publish/carousel-${i + 1}.png`, [1920, 1080]])
 ];
 for (const [file, [w, h]] of LISTING_IMAGES) {
   const size = existsSync(join(root, file)) ? pngSize(file) : null;
