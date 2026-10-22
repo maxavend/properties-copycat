@@ -300,3 +300,201 @@ h2 {
   border-color: var(--pink);
   color: var(--pink);
 }
+
+/* --- Figma panel mock (UI3 dark, drawn at 2×) --- */
+
+.fp {
+  box-sizing: border-box;
+  width: 560px;
+  border-radius: 16px;
+  overflow: hidden;
+  font-size: 22px;
+  color: #f0f0f0;
+  background: #2c2c2c;
+  border: 2px solid #3a3a3a;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+
+.fp-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 28px;
+  font-weight: 600;
+  color: var(--sel, var(--violet));
+  border-bottom: 2px solid #3a3a3a;
+}
+
+.fp.copy {
+  --sel: var(--pink);
+}
+
+.fp-sec {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px 28px 28px;
+}
+
+.fp-sec + .fp-sec {
+  border-top: 2px solid #3a3a3a;
+}
+
+.fp-title {
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.fp-row {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  align-items: center;
+  gap: 16px;
+  min-height: 56px;
+}
+
+.fp-label {
+  color: #a3a3a3;
+}
+
+.fp-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  padding: 0 18px;
+  border-radius: 10px;
+  background: #383838;
+  white-space: nowrap;
+}
+
+.fp-field .chev {
+  margin-left: auto;
+  width: 10px;
+  height: 10px;
+  border-right: 2.5px solid #a3a3a3;
+  border-bottom: 2.5px solid #a3a3a3;
+  transform: translateY(-3px) rotate(45deg);
+}
+
+.fp-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.mini-toggle {
+  position: relative;
+  width: 52px;
+  height: 30px;
+  border-radius: 15px;
+  background: #5a5a5a;
+}
+
+.mini-toggle::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.mini-toggle.on {
+  background: #0d99ff;
+}
+
+.mini-toggle.on::after {
+  left: auto;
+  right: 4px;
+}
+
+.swatch {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.12);
+}
+
+/* Bound variable, as Figma shows it: a pill inside the field */
+.var {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: #4a4a4a;
+}
+
+.var::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 2.5px solid #c8c8c8;
+  border-radius: 3px;
+  transform: rotate(45deg) scale(0.8);
+}
+
+.var.color::before {
+  display: none;
+}
+
+/* Marks a value the paste just changed */
+.fp-row.changed .fp-field {
+  box-shadow: inset 0 0 0 2px var(--pink);
+}
+
+.diamond.sm {
+  width: 10px;
+  height: 10px;
+  border-width: 2px;
+}
+
+/* --- Layout for the detail slides: text left, visual right --- */
+
+.split {
+  display: grid;
+  grid-template-columns: 600px 1fr;
+  gap: 100px;
+  align-items: center;
+}
+
+.split h2 {
+  font-size: 80px;
+}
+
+.split .lead {
+  margin-top: 40px;
+  font-size: 32px;
+}
+
+.visual {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 48px;
+}
+
+.arrow {
+  flex: none;
+  width: 64px;
+  height: 3px;
+  border-radius: 2px;
+  background: #4a4852;
+  position: relative;
+}
+
+.arrow::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: -7px;
+  width: 14px;
+  height: 14px;
+  border-top: 3px solid #4a4852;
+  border-right: 3px solid #4a4852;
+  transform: rotate(45deg);
+}

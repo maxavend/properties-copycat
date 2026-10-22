@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!-- Figma Community carousel 3 (1920×1080): component properties. Render with `npm run listing`. -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="listing.css">
+  <style>
+    .stage {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 72px;
+    }
+
+    .visual {
+      justify-content: center;
+    }
+
+    h2 {
+      font-size: 76px;
+    }
+
+    .fp {
+      width: 600px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage">
+    <div>
+      <p class="kicker">Component properties</p>
+      <h2>Variants, toggles, text and swaps.<br><span class="quiet">Copied as set.</span></h2>
+    </div>
+
+    <div class="visual">
+      <div class="fp" id="source"></div>
+      <span class="arrow"></span>
+      <div class="fp copy" id="copy"></div>
+    </div>
+  </div>
+
+  <template id="props">
+    <div class="fp-head"><span class="diamond"></span>Card</div>
+    <div class="fp-sec">
+      <div class="fp-title">Properties</div>
+      <div class="fp-row"><span class="fp-label">Size</span><span class="fp-field">Large<span class="chev"></span></span></div>
+      <div class="fp-row"><span class="fp-label">State</span><span class="fp-field">Active<span class="chev"></span></span></div>
+      <div class="fp-row"><span class="fp-label">Show avatar</span><span class="mini-toggle on"></span></div>
+      <div class="fp-row"><span class="fp-label">Title</span><span class="fp-field">Weekly report</span></div>
+      <div class="fp-row"><span class="fp-label">Icon</span><span class="fp-field"><span class="diamond sm"></span>Star<span class="chev"></span></span></div>
+    </div>
+  </template>
+
+  <script>
+    const props = document.getElementById('props').content;
+    document.getElementById('source').appendChild(props.cloneNode(true));
+    const copy = document.getElementById('copy');
+    copy.appendChild(props.cloneNode(true));
+    copy.querySelectorAll('.fp-row').forEach(row => row.classList.add('changed'));
+  </script>
+</body>
+
+</html>

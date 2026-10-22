@@ -57,7 +57,14 @@ Textos e imágenes listos para el formulario **Plugins → Manage plugins → Pu
 
 - **Icon:** `publish/icon.png` (128 × 128).
 - **Thumbnail:** `publish/cover.png` (1920 × 1080).
-- **Carousel:** `publish/carousel-1.png` (cómo funciona) y `publish/carousel-2.png` (qué copia), ambas de 1920 × 1080. Puedes sumar capturas reales del plugin dentro de Figma.
+- **Carousel:** siete imágenes de 1920 × 1080, en este orden (la portada va primero como thumbnail):
+  1. `publish/carousel-1.png`: cómo funciona.
+  2. `publish/carousel-2.png`: qué copia.
+  3. `publish/carousel-3.png`: propiedades de componente.
+  4. `publish/carousel-4.png`: textos.
+  5. `publish/carousel-5.png`: auto layout.
+  6. `publish/carousel-6.png`: variables.
+  7. `publish/carousel-7.png`: instancias anidadas y avisos.
 
 Las fuentes de las imágenes están en `publish/src/`. Para regenerarlas usa `npm run build` y después `npm run listing`.
 

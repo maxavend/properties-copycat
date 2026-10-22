@@ -14,10 +14,11 @@ const root = new URL('..', import.meta.url).pathname;
 const chrome = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const CAROUSEL = 7;
 const PAGES = [
   ['publish/src/cover.html', 'publish/cover.png', [1920, 1080]],
-  ['publish/src/carousel-1.html', 'publish/carousel-1.png', [1920, 1080]],
-  ['publish/src/carousel-2.html', 'publish/carousel-2.png', [1920, 1080]]
+  ...Array.from({ length: CAROUSEL }, (_, i) =>
+    [`publish/src/carousel-${i + 1}.html`, `publish/carousel-${i + 1}.png`, [1920, 1080]])
 ];
 
 async function connect(profile) {

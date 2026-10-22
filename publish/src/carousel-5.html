@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!-- Figma Community carousel 5 (1920×1080): auto layout. Render with `npm run listing`. -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="listing.css">
+  <style>
+    .visual {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 56px;
+    }
+
+    /* The copy, with Figma's spacing overlays for padding and gap */
+    .alframe {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      padding: 36px;
+      width: 640px;
+    }
+
+    .alframe .action {
+      flex: none;
+      width: 120px;
+      height: 52px;
+    }
+
+    .alframe .action::after {
+      width: 56px;
+    }
+
+    .space {
+      position: absolute;
+      background: rgba(255, 79, 154, 0.1);
+    }
+
+    .space b {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 17px;
+      font-weight: 600;
+      color: #fff;
+      background: var(--pink);
+    }
+
+    .fp {
+      width: 640px;
+    }
+
+    .dir {
+      display: flex;
+      gap: 6px;
+      padding: 6px;
+      border-radius: 10px;
+      background: #383838;
+      width: max-content;
+    }
+
+    .dir span {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 44px;
+      border-radius: 8px;
+    }
+
+    .dir span.on {
+      background: #4a4a4a;
+    }
+
+    .dir svg {
+      width: 24px;
+      height: 24px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage split">
+    <div>
+      <p class="kicker">Auto layout</p>
+      <h2>Same spacing, <span class="quiet">same flow.</span></h2>
+      <p class="lead">Direction, alignment, padding, gap and sizing, for the instance and every frame inside it.</p>
+    </div>
+
+    <div class="visual">
+      <div class="inst alframe copy" id="frame">
+        <div class="tag"><span class="diamond"></span>Copy</div>
+        <span class="avatar"></span>
+        <span class="bars"><span class="bar strong" style="width: 80%"></span><span class="bar" style="width: 55%"></span></span>
+        <span class="toggle"></span>
+        <span class="action"></span>
+      </div>
+
+      <div class="fp copy">
+        <div class="fp-head"><span class="diamond"></span>Card</div>
+        <div class="fp-sec">
+          <div class="fp-title">Auto layout</div>
+          <div class="fp-row"><span class="fp-label">Direction</span>
+            <span class="dir">
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="#e0e0e0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 14l6 6 6-6" /></svg></span>
+              <span class="on"><svg viewBox="0 0 24 24" fill="none" stroke="#e0e0e0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6" /></svg></span>
+            </span>
+          </div>
+          <div class="fp-row"><span class="fp-label">Gap</span><span class="fp-field">28</span></div>
+          <div class="fp-row"><span class="fp-label">Padding</span><span class="fp-field">36</span></div>
+          <div class="fp-row"><span class="fp-label">Size</span>
+            <span class="fp-pair"><span class="fp-field">W&nbsp; Fixed</span><span class="fp-field">H&nbsp; Hug</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Padding bands and gap bands, measured from the real layout
+    const frame = document.getElementById('frame');
+    const f = frame.getBoundingClientRect();
+    const kids = [...frame.children].filter(el => !el.classList.contains('tag'));
+    const pad = 36;
+    const band = (x, y, w, h, label) => {
+      const el = document.createElement('div');
+      el.className = 'space';
+      Object.assign(el.style, { left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${h}px` });
+      if (label) el.innerHTML = `<b>${label}</b>`;
+      frame.appendChild(el);
+    };
+    band(0, 0, f.width, pad, pad);
+    band(0, f.height - pad, f.width, pad);
+    band(0, pad, pad, f.height - pad * 2);
+    band(f.width - pad, pad, pad, f.height - pad * 2);
+    for (let i = 0; i < kids.length - 1; i++) {
+      const a = kids[i].getBoundingClientRect();
+      const b = kids[i + 1].getBoundingClientRect();
+      band(a.right - f.left, pad, b.left - a.right, f.height - pad * 2, i === 0 ? 28 : '');
+    }
+  </script>
+</body>
+
+</html>

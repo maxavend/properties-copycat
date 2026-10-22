@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!-- Figma Community carousel 7 (1920×1080): nested instances and warnings. Render with `npm run listing`. -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="listing.css">
+  <style>
+    .split {
+      grid-template-columns: 520px 1fr;
+      gap: 80px;
+    }
+
+    .visual {
+      gap: 40px;
+      align-items: stretch;
+    }
+
+    .fp {
+      width: 460px;
+    }
+
+    .layer {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      height: 52px;
+    }
+
+    .layer .ico {
+      display: grid;
+      place-items: center;
+      width: 22px;
+      color: #c4a3ff;
+    }
+
+    .layer .ico.text,
+    .layer .ico.frame {
+      font-size: 20px;
+      font-weight: 600;
+      color: #a3a3a3;
+    }
+
+    .panel.sm {
+      width: 512px;
+      height: 640px;
+    }
+
+    .panel.sm iframe {
+      transform: scale(1.6);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage split">
+    <div>
+      <p class="kicker">Nested instances</p>
+      <h2>Goes all the way <span class="quiet">down.</span></h2>
+      <p class="lead">Nested instances are copied too, and layers are matched by name, so their order doesn’t matter. Anything it can’t apply shows up under Warnings.</p>
+    </div>
+
+    <div class="visual">
+      <div class="fp">
+        <div class="fp-head" style="color:#f0f0f0">Layers</div>
+        <div class="fp-sec" id="tree" style="gap:0"></div>
+      </div>
+      <div class="panel sm">
+        <iframe id="ui" src="../../dist/ui.html" title="Properties Copycat"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tree = [
+      [0, 'instance', 'Card'], [1, 'instance', 'Header'], [2, 'instance', 'Avatar'], [2, 'text', 'Title'],
+      [2, 'instance', 'Toggle'], [1, 'frame', 'Media'], [1, 'instance', 'Button'], [2, 'text', 'Label']
+    ];
+    const box = document.getElementById('tree');
+    for (const [depth, kind, name] of tree) {
+      const row = document.createElement('div');
+      row.className = 'layer';
+      row.style.paddingLeft = `${depth * 32}px`;
+      const icon = kind === 'instance' ? '<span class="diamond sm"></span>' : kind === 'text' ? 'T' : '#';
+      row.innerHTML = `<span class="ico ${kind}">${icon}</span><span></span>`;
+      row.lastChild.textContent = name;
+      box.appendChild(row);
+    }
+
+    // Same messages the plugin sends after a paste that hit one instance of another component
+    const frame = document.getElementById('ui');
+    frame.addEventListener('load', () => {
+      const send = (pluginMessage) => frame.contentWindow.postMessage({ pluginMessage }, '*');
+      send({ type: 'selection-update', selection: [{ type: 'INSTANCE' }, { type: 'INSTANCE' }, { type: 'INSTANCE' }] });
+      send({ type: 'properties-copied', instances: ['Card', 'Header', 'Avatar', 'Toggle', 'Button'] });
+      send({ type: 'copy-done' });
+      send({ type: 'paste-result', warnings: ['Skipped "Badge" because it\'s from another component.', '1 layer has no match in the target.'] });
+      send({ type: 'status', message: 'Pasted with 2 warnings.' });
+    });
+  </script>
+</body>
+
+</html>
